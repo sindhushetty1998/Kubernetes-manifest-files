@@ -1,0 +1,88 @@
+1)firstly install docker on both master and slave machines
+- sudo apt update
+- sudo apt install docker.io
+
+2) secondly in browser search install kubeadm and open the first blog (install in both master and slave)
+- become super user before executing all the commands
+- sudo su
+
+- follow the installation commands, but dont use the last command i.e, {sudo apt-mark hold kubelet kubeadm kubectl}
+
+3) after installing kubeadm setup the kubernetes cluster 
+use the below command to create cluster (execute this command only in the master)
+
+kubeadm init --apiserver-advertise-address=172.31.25.135 --pod-network-cidr=192.168.0.0/16
+in the place of ip address use master machine private IP
+
+4)after applying this command you will get a token, paste this token in slave machine to make it as slave
+
+5) activate kubernetes pod networking or else all nodes will be in not ready state, use the below command
+- kubectl apply -f https://github.com/coreos/flannel/raw/master/Documentation/kube-flannel.yml
+
+6) after running the 3rd command in master you will also get three commands on the screen which should be executed on master to configure it. After configuring it you will be able to execute all the kubernetes command. Now you have configured kubernetes fully, start using kubernetes.
+
+7) if you get any error saying specify the port number execute the below commands to elemminate that error
+- 	sudo systemctl stop kubelet
+	sudo systemctl start kubelet
+	strace -eopenat kubectl version
+
+	or 
+
+	sudo systemctl stop kubelet && sudo systemctl start kubelet && strace -eopenat kubectl version
+
+	or
+
+	sudo cp /etc/kubernetes/admin.conf $HOME/
+
+	sudo chown $(id -u):$(id -g) $HOME/admin.conf
+
+	export KUBECONFIG=$HOME/admin.conf
+
+	or
+	
+	sudo cp /etc/kubernetes/admin.conf $HOME/ && sudo chown $(id -u):$(id -g) $HOME/admin.conf && export KUBECONFIG=$HOME/admin.conf
+_________________________________________________________________________________________________________________________________________________________________
+
+kubernetes command 
+
+1) kubectl get nodes
+- to get all the slaves
+
+2) kubectl get pods
+- to show all the pods
+
+4) kubectl get svc
+- to show all the services
+
+5) kubectl get ing
+- to get details of all ingress
+
+6) kubectl create -f manifest_file.yml
+- to create a kubernetes component that is specified in manifest_file
+
+7) kubectl delete pod nginx 
+or
+kubectl delete svc nginx
+or
+kubectl delete ing nginx
+- to delete a pod or service or ingress called nginx
+
+8) kubectl apply manifest_file.yml
+- to apply the changes made in file called manifest_file.yml
+
+9) kubectl create service nodeport nginx --tcp=80:80 
+- to create a nodeport service called nginx (you can also create clusterip instead of nodeport
+
+10)kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/baremetal/deploy.yaml 
+-to download ingress plugin to create a ingress component
+
+
+
+
+
+
+
+
+
+
+
