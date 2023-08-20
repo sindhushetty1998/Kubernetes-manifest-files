@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nodeapp1
+
+spec:
+  containers:
+    - name: nodeapp1
+      image: kishore18111997/deploytomcat
+      ports:
+        - containerPort: 8080
